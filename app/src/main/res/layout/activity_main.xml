@@ -51,6 +51,7 @@
                         android:ems="10"
                         android:inputType="number|numberDecimal"
                         android:padding="8dp"
+                        android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
@@ -72,7 +73,7 @@
 
                         <View
                             android:id="@+id/divider"
-                            android:layout_width="5dp"
+                            android:layout_width="7dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:background="#757575"
@@ -120,6 +121,7 @@
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:padding="8dp"
+                        android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
@@ -164,6 +166,7 @@
                         android:ems="10"
                         android:inputType="numberDecimal"
                         android:padding="8dp"
+                        android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/black"
                         android:textSize="22sp" />
@@ -195,7 +198,8 @@
             android:layout_marginTop="15dp"
             android:text="@string/imc"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="27sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/imc_result"
@@ -213,12 +217,13 @@
             android:layout_marginBottom="8dp"
             android:text="TextView"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/img_body"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="160dp"
             android:visibility="visible"
             tools:srcCompat="@tools:sample/avatars" />
 

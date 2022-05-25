@@ -1,9 +1,12 @@
 package com.example.parcial1;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -29,8 +33,9 @@ public class MainActivity extends AppCompatActivity{
     TextView num_imc, lbl_imc, title_imc;
     EditText input_age, input_height, input_weight;
     ImageView img_body;
+    ImageButton btn_calculate, btn_woman, btn_man;
     String state, u_lenght, u_weight;
-    int sexo;
+    int sexo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +46,9 @@ public class MainActivity extends AppCompatActivity{
         lbl_imc = findViewById(R.id.body_build_result);
         title_imc = findViewById(R.id.title_imc);
 
-        ImageButton btn_calculate = findViewById(R.id.btn_calculate);
-        ImageButton btn_woman = findViewById(R.id.btn_woman);
-        ImageButton btn_man = findViewById(R.id.btn_man);
+        btn_calculate = findViewById(R.id.btn_calculate);
+        btn_woman = findViewById(R.id.btn_woman);
+        btn_man = findViewById(R.id.btn_man);
 
         input_age = findViewById(R.id.input_age);
         input_height = findViewById(R.id.input_height);
@@ -72,7 +77,6 @@ public class MainActivity extends AppCompatActivity{
                 btn_woman.setImageDrawable(getResources().getDrawable(R.drawable.icon_woman_color_all));
                 btn_man.setImageDrawable(getResources().getDrawable(R.drawable.icon_man_color_any));
                 sexo = 1;
-                Toast.makeText(MainActivity.this, sexo + " Woman", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -83,7 +87,6 @@ public class MainActivity extends AppCompatActivity{
                 btn_woman.setImageDrawable(getResources().getDrawable(R.drawable.icon_woman_color_any));
                 btn_man.setImageDrawable(getResources().getDrawable(R.drawable.icon_man_color_all));
                 sexo = 2;
-                Toast.makeText(MainActivity.this, sexo + " Man", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -108,7 +111,10 @@ public class MainActivity extends AppCompatActivity{
             @SuppressLint("UseCompatLoadingForDrawables")
             public void onClick(View view) {
                 try{
-                    if(!input_age.getText().toString().equals("") && !input_height.getText().toString().equals("")  && !input_weight.getText().toString().equals("")){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(btn_calculate.getWindowToken(), 0);
+
+                    if(!input_age.getText().toString().equals("") && !input_height.getText().toString().equals("")  && !input_weight.getText().toString().equals("") && sexo!=0){
                         double value_height = Double.parseDouble(input_height.getText().toString());
                         double value_weight = Double.parseDouble(input_weight.getText().toString());
                         int hedad = Integer.parseInt(input_age.getText().toString());
@@ -330,23 +336,34 @@ public class MainActivity extends AppCompatActivity{
 
                         switch(sexo){
                             case 1:
-                                Map<String, Drawable> img_body_build = new HashMap<>();
-                                img_body_build.put("normal", getResources().getDrawable(R.drawable.woman_color_all_second));
-                                img_body_build.put("delgadez", getResources().getDrawable(R.drawable.woman_color_all_third));
-                                img_body_build.put("sobrepeso", getResources().getDrawable(R.drawable.man_color_first));
-                                format_result(img_body_build);
+                                if(lbl_imc.getText().equals("Normal")){
+                                    num_imc.setTextColor(getResources().getColor(R.color.green));
+                                    lbl_imc.setTextColor(getResources().getColor(R.color.green));
+                                    img_body.setImageDrawable(getResources().getDrawable(R.drawable.woman_color_all_second));
+                                }else if(lbl_imc.getText().equals("Delgadez")){
+                                    num_imc.setTextColor(getResources().getColor(R.color.orange));
+                                    lbl_imc.setTextColor(getResources().getColor(R.color.orange));
+                                    img_body.setImageDrawable(getResources().getDrawable(R.drawable.woman_color_all_third));
+                                }else if(lbl_imc.getText().equals("Sobrepeso")){
+                                    num_imc.setTextColor(getResources().getColor(R.color.red));
+                                    lbl_imc.setTextColor(getResources().getColor(R.color.red));
+                                    img_body.setImageDrawable(getResources().getDrawable(R.drawable.woman_color_all_first));
+                                }
                                 break;
 
                             case 2:
                                 if(lbl_imc.getText().equals("Normal")){
+                                    num_imc.setTextColor(getResources().getColor(R.color.green));
                                     lbl_imc.setTextColor(getResources().getColor(R.color.green));
                                     img_body.setImageDrawable(getResources().getDrawable(R.drawable.man_color_second));
                                 }else if(lbl_imc.getText().equals("Delgadez")){
-                                    img_body.setImageDrawable(getResources().getDrawable(R.drawable.man_color_third));
+                                    num_imc.setTextColor(getResources().getColor(R.color.orange));
                                     lbl_imc.setTextColor(getResources().getColor(R.color.orange));
+                                    img_body.setImageDrawable(getResources().getDrawable(R.drawable.man_color_third));
                                 }else if(lbl_imc.getText().equals("Sobrepeso")){
+                                    num_imc.setTextColor(getResources().getColor(R.color.red));
+                                    lbl_imc.setTextColor(getResources().getColor(R.color.red));
                                     img_body.setImageDrawable(getResources().getDrawable(R.drawable.man_color_first));
-                                    img_body.setImageDrawable(getResources().getDrawable(R.drawable.woman_color_all_first));
                                 }
                                 break;
                         }
@@ -355,9 +372,11 @@ public class MainActivity extends AppCompatActivity{
                         num_imc.setVisibility(View.VISIBLE);
                         lbl_imc.setVisibility(View.VISIBLE);
                         img_body.setVisibility(View.VISIBLE);
+                    }else{
+                        Toast.makeText(MainActivity.this, "ERR_EMPTY_INPUT", Toast.LENGTH_SHORT).show();
                     }
                 }catch(Exception e){
-                    Toast.makeText(MainActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "ERR_GLOBAL", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -374,10 +393,25 @@ public class MainActivity extends AppCompatActivity{
                 num_imc.setVisibility(View.GONE);
                 lbl_imc.setVisibility(View.GONE);
                 img_body.setVisibility(View.GONE);
+                btn_woman.setImageDrawable(getResources().getDrawable(R.drawable.icon_woman_color_any));
+                btn_man.setImageDrawable(getResources().getDrawable(R.drawable.icon_man_color_any));
+                sexo = 0;
                 return true;
 
             case R.id.btn_exit:
-                System.exit(0);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage("¿Desea Salir de la Aplicación?")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                System.exit(0);
+                            }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        }).show();
+                builder.create().show();
                 return true;
 
             default:
@@ -389,18 +423,5 @@ public class MainActivity extends AppCompatActivity{
         //Print two option menu in toolbar
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    public void format_result(Map<String, Drawable> img_body_build){
-        if(lbl_imc.getText().equals("Normal")){
-            lbl_imc.setTextColor(getResources().getColor(R.color.green));
-            img_body.setImageDrawable(img_body_build.get("normal"));
-        }else if(lbl_imc.getText().equals("Delgadez")){
-            lbl_imc.setTextColor(getResources().getColor(R.color.orange));
-            img_body.setImageDrawable(img_body_build.get("delgadez"));
-        }else if(lbl_imc.getText().equals("Sobrepeso")){
-            lbl_imc.setTextColor(getResources().getColor(R.color.red));
-            img_body.setImageDrawable(img_body_build.get("sobrepeso"));
-        }
     }
 }
