@@ -2,14 +2,15 @@
     <string name="app_name">Calculadora de IMC</string>
     <string name="age">Edad</string>
     <string name="height">Altura</string>
-    <string name="weight">Peso</string> 
+    <string name="weight">Peso</string>
     <string name="imc">Índice de Masa Corporal</string>
     <string name="overweight">Sobrepeso</string>
     <string name="normal">Normal</string>
     <string name="thin">Delgado</string>
     <string name="cm">CM</string>
     <string name="KG">KG</string>
-    
+    <string name="load">Cargando</string>
+
     <string-array name="weight_measures">
         <item>KG</item>
         <item>LB</item>
